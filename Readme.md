@@ -1,4 +1,4 @@
-# log4j-snmp-appender
+# log4j2-snmp-appender
 
 Log4j2 appender to send SNMP trap messages. Use org.snmp4j [https://www.snmp4j.org/](https://www.snmp4j.org/) as underlying implementation. Underlying implementation can be extend by a custom implementation. see usage for details.   
 
