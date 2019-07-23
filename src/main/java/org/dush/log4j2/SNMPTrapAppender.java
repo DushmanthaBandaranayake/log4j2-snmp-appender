@@ -97,6 +97,10 @@ public final class SNMPTrapAppender extends AbstractAppender
 	 */
 	private String formatMsg( LogEvent event )
 	{
+		if(getLayout()== null){
+
+			error( "No Pattern Layout is setup for SNMPTrapAppender" );
+		}
 		return ( String ) getLayout().toSerializable( event );
 	}
 
