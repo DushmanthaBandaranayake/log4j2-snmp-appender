@@ -12,6 +12,7 @@ Log4j2 appender to send SNMP trap messages. Use org.snmp4j [https://www.snmp4j.o
 ```
 ## Usage 
 sample log4j2.xml 
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="ALL">
