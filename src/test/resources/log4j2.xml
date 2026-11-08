@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="ALL">
+<Configuration status="WARN">
 
     <Appenders>
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
@@ -10,14 +10,16 @@
         <!--Setting up SNMPTrapAppender -->
         <SNMPTrapAppender name="SNMPTrapAppender" >
 
-            <!--This pattern will be send with varbinding.
-            For example "SNMPv2-SMI::enterprises.24.12.10.22.64 = 13:59:30,017 [main] INFO TEST - info!"-->
-            <PatternLayout pattern="%d{HH:mm:ss,SSS} [%t] %-5p %c{36} - %m%n"/>
+            <!--This pattern will be sent in a varbind.
+            For example "SNMPv2-SMI::enterprises.24.12.10.22.64 = 13:59:30,017 [main] INFO TEST - info!"
+            alwaysWriteExceptions="false" stops the layout appending the stack trace to the message;
+            it is sent in separate varbinds when ForwardStackTraceWithTrap is true.-->
+            <PatternLayout pattern="%d{HH:mm:ss,SSS} [%t] %-5p %c{36} - %m" alwaysWriteExceptions="false"/>
 
             <!--if true prints debugging information on console(system.print())-->
             <verbose>true</verbose>
 
-            <!--SNMP version. Applicable values are 1,2c-->
+            <!--Comma separated SNMP versions. Applicable values are 1, 2c (or 2)-->
             <SNMPVersions>2c,1</SNMPVersions>
 
            <!-- IP address of the remote host that traps sent in to.-->
@@ -33,8 +35,9 @@
             <!--IP address of the host that is using this appender to send SNMP traps. This address will be encoded in the SNMP PDU-->
             <LocalIPAddress>127.0.0.1</LocalIPAddress>
 
-            <!--Value of the port that will be used to send traps out from the local host.The standard is 161-->
-            <LocalTrapSendPort>161</LocalTrapSendPort>
+            <!--Local UDP port traps are sent from. 0 or empty picks a free port.
+            Ports below 1024 (e.g. 161) usually need root privileges.-->
+            <LocalTrapSendPort>0</LocalTrapSendPort>
 
             <!-- GenericTrapType int, Applicable for SNMP v1
 
@@ -49,10 +52,10 @@
             -->
             <GenericTrapType>6</GenericTrapType>
 
-            <!-- Applicable for SNMP v1, An INTEGER in (value between -128 to 127)-->
+            <!-- Specific trap code, applicable for SNMP v1. An INTEGER (Integer32), defaults to 0-->
             <SpecificTrapType>123</SpecificTrapType>
 
-            <!--community string for the SNMP session. E.g. "public".-->
+            <!--community string for the SNMP session. Defaults to "public".-->
             <CommunityString>public</CommunityString>
 
             <!--Add each line of exception stack trace in to separate varbindings. applicable values 'true','false' -->
