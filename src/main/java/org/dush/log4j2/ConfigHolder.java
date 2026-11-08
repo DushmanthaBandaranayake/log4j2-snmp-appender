@@ -1,8 +1,11 @@
 package org.dush.log4j2;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
- * Simply wraps SNMPTrapAppenderPluginBuilder. Without directly using {@link SNMPTrapAppenderPluginBuilder}(as it could be heavy), object of
- * this calss can be used to transfer configurations.
+ * Holds the parsed appender configuration and passes it to the dispatchers, so they don't depend on
+ * {@link SNMPTrapAppenderPluginBuilder} directly.
  *
  * @author dushmantha (<a href="mailto:dushmanthab99@gmail.com">dushmanthab99@gmail.com</a>)
  * date 2018-nov-12
@@ -13,13 +16,14 @@ public class ConfigHolder
 	private String managementHostTrapListenPort;
 	private String enterpriseOID;
 	private String localIPAddress;
-	private String localTrapSendPort;
-	private String genericTrapType;
-	private boolean isSpecific;
+	private int localTrapSendPort;
+	private int genericTrapType;
+	private int specificTrapType;
 	private String communityString;
-	private String forwardStackTraceWithTrap;
+	private boolean forwardStackTraceWithTrap;
 	private String applicationTrapOID;
 	private boolean verbose = false;
+	private List<String> snmpVersions = Collections.emptyList();
 
 	public String getManagementHost()
 	{
@@ -61,34 +65,40 @@ public class ConfigHolder
 		this.localIPAddress = localIPAddress;
 	}
 
-	public String getLocalTrapSendPort()
+	/**
+	 * @return local UDP port traps are sent from; {@code 0} means an ephemeral port chosen by the OS.
+	 */
+	public int getLocalTrapSendPort()
 	{
 		return localTrapSendPort;
 	}
 
-	public void setLocalTrapSendPort( String localTrapSendPort )
+	public void setLocalTrapSendPort( int localTrapSendPort )
 	{
 		this.localTrapSendPort = localTrapSendPort;
 	}
 
-	public String getGenericTrapType()
+	public int getGenericTrapType()
 	{
 		return genericTrapType;
 	}
 
-	public void setGenericTrapType( String genericTrapType )
+	public void setGenericTrapType( int genericTrapType )
 	{
 		this.genericTrapType = genericTrapType;
 	}
 
-	public boolean isSpecific()
+	/**
+	 * @return specific trap code sent in SNMP v1 traps.
+	 */
+	public int getSpecificTrapType()
 	{
-		return isSpecific;
+		return specificTrapType;
 	}
 
-	public void setSpecific( boolean specific )
+	public void setSpecificTrapType( int specificTrapType )
 	{
-		this.isSpecific = specific;
+		this.specificTrapType = specificTrapType;
 	}
 
 	public String getCommunityString()
@@ -101,12 +111,12 @@ public class ConfigHolder
 		this.communityString = communityString;
 	}
 
-	public String getForwardStackTraceWithTrap()
+	public boolean isForwardStackTraceWithTrap()
 	{
 		return forwardStackTraceWithTrap;
 	}
 
-	public void setForwardStackTraceWithTrap( String forwardStackTraceWithTrap )
+	public void setForwardStackTraceWithTrap( boolean forwardStackTraceWithTrap )
 	{
 		this.forwardStackTraceWithTrap = forwardStackTraceWithTrap;
 	}
@@ -131,6 +141,22 @@ public class ConfigHolder
 		this.verbose = verbose;
 	}
 
+	/**
+	 * @return the configured SNMP versions, normalised to {@code "1"} and {@code "2c"}, without duplicates.
+	 */
+	public List<String> getSnmpVersions()
+	{
+		return snmpVersions;
+	}
+
+	public void setSnmpVersions( List<String> snmpVersions )
+	{
+		this.snmpVersions = snmpVersions == null ? Collections.<String>emptyList() : Collections.unmodifiableList( snmpVersions );
+	}
+
+	/**
+	 * @return management host and port in snmp4j address form, e.g. {@code 127.0.0.1/162}.
+	 */
 	public String getManagementHostPort()
 	{
 		return ( managementHost + "/" + managementHostTrapListenPort ).trim();

@@ -1,16 +1,9 @@
 package org.dush.log4j2;
 
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.ErrorHandler;
-import org.apache.logging.log4j.core.Layout;
-import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.config.plugins.Plugin;
-
-import java.io.Serializable;
 
 /**
- * Run this to debug the appender
+ * Run this to debug the appender manually. Uses src/test/resources/log4j2.xml, which sends traps to 127.0.0.1:162.
  */
 public class Main
 {
